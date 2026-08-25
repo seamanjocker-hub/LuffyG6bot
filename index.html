@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Shop Mini App</title>
+    <!-- Telegram Web App Script -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { font-family: sans-serif; background-color: var(--tg-theme-bg-color, #fff); color: var(--tg-theme-text-color, #000); padding: 15px; }
+        .card { border: 1px solid #ccc; border-radius: 8px; padding: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .btn { background: #2481cc; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h2>🛍️ Online Shop Catalog</h2>
+    
+    <div class="card">
+        <div>
+            <strong>Shirt A</strong><br>
+            <span>15,000 MMK</span>
+        </div>
+        <button class="btn" onclick="buyItem('Shirt A', '15,000 MMK')">ဝယ်မည်</button>
+    </div>
+
+    <div class="card">
+        <div>
+            <strong>Pants B</strong><br>
+            <span>25,000 MMK</span>
+        </div>
+        <button class="btn" onclick="buyItem('Pants B', '25,000 MMK')">ဝယ်မည်</button>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Screen အပြည့်ပွင့်ရန်
+
+        function buyItem(itemName, price) {
+            // ရွေးချယ်လိုက်သော အချက်အလက်ကို Bot ထံ ပြန်ပိုပေးခြင်း
+            const data = {
+                item: itemName,
+                price: price
+            };
+            tg.sendData(JSON.stringify(data)); 
+            tg.close(); // App ကို ပြန်ပိတ်လိုက်မည်
+        }
+    </script>
+</body>
+</html>
