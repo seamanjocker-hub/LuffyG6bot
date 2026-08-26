@@ -7,9 +7,35 @@
     <!-- Telegram Web App Script -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { font-family: sans-serif; background-color: var(--tg-theme-bg-color, #fff); color: var(--tg-theme-text-color, #000); padding: 15px; }
-        .card { border: 1px solid #ccc; border-radius: 8px; padding: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .btn { background: #2481cc; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
+        body { 
+            font-family: sans-serif; 
+            background-color: var(--tg-theme-bg-color, #ffffff); 
+            color: var(--tg-theme-text-color, #000000); 
+            padding: 15px; 
+            margin: 0;
+        }
+        .card { 
+            border: 1px solid #e0e0e0; 
+            border-radius: 8px; 
+            padding: 12px; 
+            margin-bottom: 12px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .btn { 
+            background: #2481cc; 
+            color: white; 
+            border: none; 
+            padding: 8px 16px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: bold;
+        }
+        .btn:active {
+            opacity: 0.8;
+        }
     </style>
 </head>
 <body>
@@ -18,7 +44,7 @@
     <div class="card">
         <div>
             <strong>Shirt A</strong><br>
-            <span>15,000 MMK</span>
+            <span style="color: #2481cc;">15,000 MMK</span>
         </div>
         <button class="btn" onclick="buyItem('Shirt A', '15,000 MMK')">ဝယ်မည်</button>
     </div>
@@ -26,23 +52,34 @@
     <div class="card">
         <div>
             <strong>Pants B</strong><br>
-            <span>25,000 MMK</span>
+            <span style="color: #2481cc;">25,000 MMK</span>
         </div>
         <button class="btn" onclick="buyItem('Pants B', '25,000 MMK')">ဝယ်မည်</button>
     </div>
 
     <script>
+        // Telegram WebApp Object စတင်ခေါ်ယူခြင်း
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Screen အပြည့်ပွင့်ရန်
+        
+        // WebApp အဆင်သင့်ဖြစ်ကြောင်း တင်ပြခြင်းနှင့် မျက်နှာပြင် အပြည့်ဖွင့်ခြင်း
+        tg.ready();
+        tg.expand();
 
         function buyItem(itemName, price) {
-            // ရွေးချယ်လိုက်သော အချက်အလက်ကို Bot ထံ ပြန်ပိုပေးခြင်း
-            const data = {
-                item: itemName,
-                price: price
-            };
-            tg.sendData(JSON.stringify(data)); 
-            tg.close(); // App ကို ပြန်ပိတ်လိုက်မည်
+            try {
+                const data = {
+                    item: itemName,
+                    price: price
+                };
+                
+                // Bot ထံသို Data ပေးပိုခြင်း
+                tg.sendData(JSON.stringify(data)); 
+                
+                // ပေးပိုပြီးပါက WebApp ကို ချက်ချင်း ပိတ်လိုက်မည်
+                tg.close();
+            } catch (error) {
+                alert("Error: " + error.message);
+            }
         }
     </script>
 </body>
