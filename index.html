@@ -24,7 +24,6 @@
 
     <script>
         const tg = window.Telegram ? window.Telegram.WebApp : null;
-
         if (tg) {
             tg.ready();
             tg.expand();
@@ -32,25 +31,15 @@
 
         function buyItem(itemName, price) {
             const textData = itemName + " - " + price;
+            const botUsername = "LuffyG6bot";
+            const targetUrl = "https://t.me/" + botUsername + "?start=Buy_" + encodeURIComponent(textData);
 
-            // ၁။ Reply Keyboard (/start ခလုတ်) မှ ဖွင့်ထားပါက sendData သုံးမည်
-            try {
-                if (tg && tg.initDataUnsafe && tg.initDataUnsafe.query_id) {
-                    tg.sendData(textData);
-                    setTimeout(() => { tg.close(); }, 300);
-                    return;
-                }
-            } catch (e) {
-                console.log(e);
+            if (tg) {
+                tg.openTelegramLink(targetUrl);
+                tg.close();
+            } else {
+                window.location.href = targetUrl;
             }
-
-            // ၂။ Menu Button မှ ဖွင့်ထားပါက Direct Telegram Link ဖြင့် Bot ဆီ စာပိုမည်
-            // ⚠️ သင့် Bot ရဲ့ Username ကို အောက်ပါနေရာမှာ လဲပေးပါ (ဥပမာ LuffyGear6_bot)
-            const botUsername = "LuffyGear6bot"; 
-            const encodedText = encodeURIComponent("Buy: " + textData);
-            
-            window.location.href = https://t.me/${botUsername}?start=${encodedText};
-            if (tg) setTimeout(() => { tg.close(); }, 500);
         }
     </script>
 </body>
