@@ -15,10 +15,8 @@
         .item-info strong { font-size: 18px; color: #111; }
         .item-price { color: #2481cc; font-weight: bold; margin-top: 5px; display: block; }
         
-        .btn { background: #2481cc; color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.2s; }
-        .btn:hover { background: #1a639f; }
+        .btn { background: #2481cc; color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; }
         
-        /* Checkout & Slip Upload Section */
         #checkout-section { display: none; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
         .payment-box { background: #eef6fc; padding: 15px; border-radius: 10px; margin: 15px 0; border-left: 4px solid #2481cc; }
         .payment-box p { margin: 5px 0; font-size: 14px; }
@@ -29,19 +27,17 @@
         
         .submit-btn { background: #28a745; color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 15px; }
         .back-btn { background: #6c757d; color: white; border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; margin-bottom: 15px; }
-        #selected-file-name { margin-top: 8px; font-size: 13px; color: #555; word-break: break-all; }
+        #selected-file-name { margin-top: 8px; font-size: 13px; color: #555; }
         #status-msg { margin-top: 15px; font-weight: bold; text-align: center; }
     </style>
 </head>
 <body>
 
-    <!-- Header -->
     <div class="header">
         <h2>🛍️ Luffy Gear 6 Shop</h2>
         <p style="font-size: 13px; color: #666;">လိုချင်သော ပစ္စည်းများကို အလွယ်တကူ ဝယ်ယူနိုင်ပါသည်။</p>
     </div>
 
-    <!-- Page 1: Item Catalog -->
     <div id="shop-section">
         <div class="card">
             <div class="item-info">
@@ -60,7 +56,6 @@
         </div>
     </div>
 
-    <!-- Page 2: Checkout & Slip Upload -->
     <div id="checkout-section">
         <button class="back-btn" onclick="goBack()">⬅️ နောက်သို ပြန်သွားမည်</button>
         
@@ -78,7 +73,6 @@
             <input type="file" id="slip-file" accept="image/*" onchange="showFileName()">
             <div id="selected-file-name">ဓာတ်ပုံ မရွေးရသေးပါ</div>
         </div>
-
         <button type="button" class="submit-btn" id="submit-btn" onclick="sendOrderToBot()">အတည်ပြု၍ အော်ဒါတင်မည်</button>
         
         <div id="status-msg"></div>
@@ -94,25 +88,21 @@
         let selectedItemName = "";
         let selectedItemPrice = "";
 
-        // ၁။ ပစ္စည်း ရွေးချယ်သည့် Function
         function selectItem(name, price) {
             selectedItemName = name;
             selectedItemPrice = price;
-
             document.getElementById('shop-section').style.display = 'none';
             document.getElementById('checkout-section').style.display = 'block';
             document.getElementById('selected-item-title').innerText = "📦 " + name;
             document.getElementById('item-price').innerText = price;
         }
 
-        // ၂။ နောက်သို ပြန်သွားသည့် Function
         function goBack() {
             document.getElementById('shop-section').style.display = 'block';
             document.getElementById('checkout-section').style.display = 'none';
             document.getElementById('status-msg').innerText = '';
         }
 
-        // ၃။ ပုံရွေးလိုက်ပါက ဖိုင်အမည် ပြသပေးခြင်း
         function showFileName() {
             const fileInput = document.getElementById('slip-file');
             const fileNameDiv = document.getElementById('selected-file-name');
@@ -122,8 +112,7 @@
             }
         }
 
-        // ၄။ Bot ဆီ Order နှင့် Data တိုက်ရိုက် ပိုခြင်း
-        function sendOrderToBot() {
+        async function sendOrderToBot() {
             const fileInput = document.getElementById('slip-file');
             const statusMsg = document.getElementById('status-msg');
 
@@ -133,18 +122,41 @@
             }
 
             statusMsg.style.color = "blue";
-            statusMsg.innerText = "⏳ အော်ဒါ တင်နေပါသည်... ခဏစောင့်ပါ";
+            statusMsg.innerText = "⏳ ဓာတ်ပုံ တင်နေပါသည်... ခဏစောင့်ပါ";
 
-            // Telegram WebApp sendData သိုမဟုတ် Link ဘက်သို ပိုခြင်း
-            const dataStr = "ORDER:" + selectedItemName + ":" + selectedItemPrice;
+            const formData = new FormData();
+            formData.append('photo', fileInput.files[0]);
+            formData.append('item_name', selectedItemName);
+            formData.append('price', selectedItemPrice);
 
-            if (tg) {
-                tg.sendData(dataStr);
-                setTimeout(() => {
-                    tg.close();
-                }, 1000);
-            } else {
-                alert("Telegram App ထဲတွင်သာ သုံးစွဲနိုင်ပါသည်။");
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                formData.append('user_id', tg.initDataUnsafe.user.id);
+                formData.append('username', tg.initDataUnsafe.user.username || tg.initDataUnsafe.user.first_name);
+            }
+
+            try {
+                // PythonAnywhere Online Server သို တိုက်ရိုက် ပိုခြင်း
+                const response = await fetch('https://JockerLinn.pythonanywhere.com/upload_slip', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    statusMsg.style.color = "green";
+                    statusMsg.innerText = "✅ အော်ဒါ တင်ပြီးပါပြီ!";
+                    setTimeout(() => {
+                        if (tg) tg.close();
+                    }, 1500);
+                } else {
+                    statusMsg.style.color = "red";
+                    statusMsg.innerText = "❌ အော်ဒါ တင်၍ မရပါ။ ပြန်လည် ကြိုးစားပါ။";
+                }
+            } catch (error) {
+                console.error(error);
+                statusMsg.style.color = "red";
+                statusMsg.innerText = "⚠️ Server သို ချိတ်ဆက်၍ မရပါ။";
             }
         }
     </script>
