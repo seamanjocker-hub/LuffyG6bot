@@ -6,20 +6,51 @@
     <title>Online Shop Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { font-family: sans-serif; padding: 15px; margin: 0; background-color: #f4f4f9; }
-        .card { background: white; border: 1px solid #ccc; border-radius: 8px; padding: 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        body { font-family: sans-serif; padding: 15px; margin: 0; background-color: #f4f4f9; color: #333; }
+        .card { background: white; border: 1px solid #ddd; border-radius: 10px; padding: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .btn { background: #2481cc; color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        
+        /* Checkout Section */
+        #checkout-section { display: none; background: white; padding: 20px; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .payment-info { background: #eef6fc; padding: 12px; border-radius: 8px; margin: 12px 0; border-left: 4px solid #2481cc; }
+        input[type="file"] { margin: 10px 0; width: 100%; }
+        .submit-btn { background: #28a745; color: white; border: none; width: 100%; padding: 12px; border-radius: 6px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        .back-btn { background: #6c757d; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; margin-bottom: 10px; }
+        #status-msg { margin-top: 10px; font-weight: bold; text-align: center; }
     </style>
 </head>
 <body>
-    <h2>🛍️ Online Shop Catalog</h2>
-    
-    <div class="card">
-        <div>
-            <strong>Shirt A</strong><br>
-            <span style="color: #2481cc;">15,000 MMK</span>
+
+    <!-- ၁။ Catalog / Item List -->
+    <div id="shop-section">
+        <h2>🛍️ Online Shop Catalog</h2>
+        <div class="card">
+            <div>
+                <strong>Shirt A</strong><br>
+                <span style="color: #2481cc; font-weight: bold;">15,000 MMK</span>
+            </div>
+            <button class="btn" onclick="selectItem('Shirt A', '15,000 MMK')">ဝယ်မည်</button>
         </div>
-        <button class="btn" onclick="buyItem('Shirt A', '15,000 MMK')">ဝယ်မည်</button>
+    </div>
+
+    <!-- ၂။ Web ထဲမှာတင် ငွေလွှပြီး စလစ်တင်ရန် Section -->
+    <div id="checkout-section">
+        <button class="back-btn" onclick="goBack()">⬅️ နောက်သို</button>
+        <h3 id="selected-item-title">အော်ဒါ အချက်အလက်</h3>
+        
+        <div class="payment-info">
+            <strong>💳 ငွေလွှရန် အကောင့်များ:</strong><br>
+            • KBZPay / Wave: <code>09123456789</code> (U Name)<br>
+            • ကျသင့်ငွေ: <span id="item-price" style="color: #2481cc; font-weight: bold;"></span>
+        </div>
+
+        <form id="upload-form">
+            <label><strong>📸 ငွေလွှစလစ် ဓာတ်ပုံ တင်ပါ:</strong></label><br>
+            <input type="file" id="slip-file" accept="image/*" required><br>
+            <button type="submit" class="submit-btn" id="submit-btn">အတည်ပြု၍ အော်ဒါတင်မည်</button>
+        </form>
+
+        <div id="status-msg"></div>
     </div>
 
     <script>
@@ -29,18 +60,83 @@
             tg.expand();
         }
 
-        function buyItem(itemName, price) {
-            const textData = itemName + " - " + price;
-            const botUsername = "LuffyG6bot";
-            const targetUrl = "https://t.me/" + botUsername + "?start=Buy_" + encodeURIComponent(textData);
+        let selectedItemName = "";
+        let selectedItemPrice = "";
 
-            if (tg) {
-                tg.openTelegramLink(targetUrl);
-                tg.close();
-            } else {
-                window.location.href = targetUrl;
-            }
+        // ဝယ်မည် နှိပ်လျှင် ငွေလွှစလစ်တင်သည့် Form ကို Mini App ထဲမှာတင် ပွင့်စေခြင်း
+        function selectItem(name, price) {
+            selectedItemName = name;
+            selectedItemPrice = price;
+
+            document.getElementById('shop-section').style.display = 'none';
+            document.getElementById('checkout-section').style.display = 'block';
+            document.getElementById('selected-item-title').innerText = "📦 " + name;
+            document.getElementById('item-price').innerText = price;
         }
+
+        function goBack() {
+            document.getElementById('shop-section').style.display = 'block';
+            document.getElementById('checkout-section').style.display = 'none';
+            document.getElementById('status-msg').innerText = '';
+        }
+
+        // Form Submit လုပ်ပြီး ပုံကို Server ဆီ တိုက်ရိုက် တင်ခြင်း
+        document.getElementById('upload-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const fileInput = document.getElementById('slip-file');
+            if (fileInput.files.length === 0) {
+                alert("ကျေးဇူးပြု၍ ငွေလွှစလစ် ဓာတ်ပုံ ရွေးချယ်ပေးပါ!");
+                return;
+            }
+
+            const submitBtn = document.getElementById('submit-btn');
+            const statusMsg = document.getElementById('status-msg');
+            
+            submitBtn.disabled = true;
+            submitBtn.innerText = "ခဏစောင့်ပါ...";
+            statusMsg.style.color = "blue";
+            statusMsg.innerText = "ငွေလွှစလစ်ကို ပိုဆောင်နေပါသည်...";
+
+            // Telegram User Info ယူခြင်း
+            const user = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user : { id: 6423386504, first_name: "Customer" };
+
+            const formData = new FormData();
+            formData.append("photo", fileInput.files[0]);
+            formData.append("user_id", user.id);
+            formData.append("username", user.username || user.first_name);
+            formData.append("item", selectedItemName);
+            formData.append("price", selectedItemPrice);
+
+            try {
+                // Flask Server ဆီ ပုံ ပိုခြင်း
+                const response = await fetch('/upload_order', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    statusMsg.style.color = "green";
+                    statusMsg.innerText = "✅ အော်ဒါ တင်ခြင်း အောင်မြင်ပါသည်။ Admin ထံ အကြောင်းကြားစာ ရောက်သွားပါပြီ။";
+                    setTimeout(() => {
+                        if (tg) tg.close();
+                    }, 2000);
+                } else {
+                    statusMsg.style.color = "red";
+                    statusMsg.innerText = "❌ အမှားအယွင်း ရှိနေပါသည်။ ပြန်လည် ကြိုးစားပါ။";
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "အတည်ပြု၍ အော်ဒါတင်မည်";
+                }
+            } catch (err) {
+                console.error(err);
+                statusMsg.style.color = "red";
+                statusMsg.innerText = "❌ Server ချိတ်ဆက်၍ မရပါ။";
+                submitBtn.disabled = false;
+                submitBtn.innerText = "အတည်ပြု၍ အော်ဒါတင်မည်";
+            }
+        });
     </script>
 </body>
 </html>
