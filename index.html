@@ -3,23 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Shop Mini App</title>
+    <title>Luffy Gear 6 Online Shop</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { font-family: sans-serif; padding: 15px; margin: 0; background-color: #f4f4f9; color: #333; }
-        .card { background: white; border: 1px solid #ddd; border-radius: 10px; padding: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .btn { background: #2481cc; color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 15px; margin: 0; background-color: #f0f2f5; color: #333; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h2 { margin: 5px 0; color: #2481cc; }
+        
+        .card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .item-info strong { font-size: 18px; color: #111; }
+        .item-price { color: #2481cc; font-weight: bold; margin-top: 5px; display: block; }
+        
+        .btn { background: #2481cc; color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.2s; }
+        .btn:hover { background: #1a639f; }
+        
+        /* Checkout & Slip Upload Section */
+        #checkout-section { display: none; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .payment-box { background: #eef6fc; padding: 15px; border-radius: 10px; margin: 15px 0; border-left: 4px solid #2481cc; }
+        .payment-box p { margin: 5px 0; font-size: 14px; }
+
+        .upload-box { margin-top: 15px; text-align: center; border: 2px dashed #cbd5e1; padding: 20px; border-radius: 10px; background: #fafafa; }
+        input[type="file"] { display: none; }
+        .file-label { background: #343a40; color: white; padding: 10px 15px; border-radius: 6px; cursor: pointer; display: inline-block; font-size: 14px; margin-top: 8px; }
+        
+        .submit-btn { background: #28a745; color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 15px; }
+        .back-btn { background: #6c757d; color: white; border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; margin-bottom: 15px; }
+        #selected-file-name { margin-top: 8px; font-size: 13px; color: #555; word-break: break-all; }
+        #status-msg { margin-top: 15px; font-weight: bold; text-align: center; }
     </style>
 </head>
 <body>
-    <h2>🛍️ Online Shop Catalog</h2>
-    
-    <div class="card">
-        <div>
-            <strong>Shirt A</strong><br>
-            <span style="color: #2481cc; font-weight: bold;">15,000 MMK</span>
+
+    <!-- Header -->
+    <div class="header">
+        <h2>🛍️ Luffy Gear 6 Shop</h2>
+        <p style="font-size: 13px; color: #666;">လိုချင်သော ပစ္စည်းများကို အလွယ်တကူ ဝယ်ယူနိုင်ပါသည်။</p>
+    </div>
+
+    <!-- Page 1: Item Catalog -->
+    <div id="shop-section">
+        <div class="card">
+            <div class="item-info">
+                <strong>Shirt A (Luffy Edition)</strong>
+                <span class="item-price">15,000 MMK</span>
+            </div>
+            <button class="btn" onclick="selectItem('Shirt A', '15,000 MMK')">ဝယ်မည်</button>
         </div>
-        <button class="btn" onclick="buyItem('Shirt A', '15,000 MMK')">ဝယ်မည်</button>
+
+        <div class="card">
+            <div class="item-info">
+                <strong>Shirt B (Zoro Edition)</strong>
+                <span class="item-price">18,000 MMK</span>
+            </div>
+            <button class="btn" onclick="selectItem('Shirt B', '18,000 MMK')">ဝယ်မည်</button>
+        </div>
+    </div>
+
+    <!-- Page 2: Checkout & Slip Upload -->
+    <div id="checkout-section">
+        <button class="back-btn" onclick="goBack()">⬅️ နောက်သို ပြန်သွားမည်</button>
+        
+        <h3 id="selected-item-title" style="margin-top:0;">📦 အော်ဒါ အချက်အလက်</h3>
+        
+        <div class="payment-box">
+            <strong>💳 ငွေလွှရန် အကောင့်များ:</strong>
+            <p>• <b>KBZPay / Wave:</b> <code>09123456789</code> (U Name)</p>
+            <p>• <b>ကျသင့်ငွေ:</b> <span id="item-price" style="color: #2481cc; font-weight: bold;"></span></p>
+        </div>
+
+        <div class="upload-box">
+            <label style="font-weight: bold; display: block;">📸 ငွေလွှစလစ် ဓာတ်ပုံ တင်ပါ</label>
+            <label for="slip-file" class="file-label">📁 ပုံရွေးရန် နှိပ်ပါ</label>
+            <input type="file" id="slip-file" accept="image/*" onchange="showFileName()">
+            <div id="selected-file-name">ဓာတ်ပုံ မရွေးရသေးပါ</div>
+        </div>
+
+        <button type="button" class="submit-btn" id="submit-btn" onclick="sendOrderToBot()">အတည်ပြု၍ အော်ဒါတင်မည်</button>
+        
+        <div id="status-msg"></div>
     </div>
 
     <script>
@@ -29,15 +91,60 @@
             tg.expand();
         }
 
-        function buyItem(itemName, price) {
-            const dataStr = itemName + " - " + price;
-            
+        let selectedItemName = "";
+        let selectedItemPrice = "";
+
+        // ၁။ ပစ္စည်း ရွေးချယ်သည့် Function
+        function selectItem(name, price) {
+            selectedItemName = name;
+            selectedItemPrice = price;
+
+            document.getElementById('shop-section').style.display = 'none';
+            document.getElementById('checkout-section').style.display = 'block';
+            document.getElementById('selected-item-title').innerText = "📦 " + name;
+            document.getElementById('item-price').innerText = price;
+        }
+
+        // ၂။ နောက်သို ပြန်သွားသည့် Function
+        function goBack() {
+            document.getElementById('shop-section').style.display = 'block';
+            document.getElementById('checkout-section').style.display = 'none';
+            document.getElementById('status-msg').innerText = '';
+        }
+
+        // ၃။ ပုံရွေးလိုက်ပါက ဖိုင်အမည် ပြသပေးခြင်း
+        function showFileName() {
+            const fileInput = document.getElementById('slip-file');
+            const fileNameDiv = document.getElementById('selected-file-name');
+            if (fileInput.files.length > 0) {
+                fileNameDiv.innerText = "📄 ရွေးချယ်ထားသော ပုံ: " + fileInput.files[0].name;
+                fileNameDiv.style.color = "green";
+            }
+        }
+
+        // ၄။ Bot ဆီ Order နှင့် Data တိုက်ရိုက် ပိုခြင်း
+        function sendOrderToBot() {
+            const fileInput = document.getElementById('slip-file');
+            const statusMsg = document.getElementById('status-msg');
+
+            if (fileInput.files.length === 0) {
+                alert("ကျေးဇူးပြု၍ ငွေလွှစလစ် ဓာတ်ပုံ အရင် ရွေးချယ်ပေးပါ!");
+                return;
+            }
+
+            statusMsg.style.color = "blue";
+            statusMsg.innerText = "⏳ အော်ဒါ တင်နေပါသည်... ခဏစောင့်ပါ";
+
+            // Telegram WebApp sendData သိုမဟုတ် Link ဘက်သို ပိုခြင်း
+            const dataStr = "ORDER:" + selectedItemName + ":" + selectedItemPrice;
+
             if (tg) {
-                // Telegram WebApp ထံ Data တိုက်ရိုက်ပိုပြီး Web ပိတ်ခြင်း
                 tg.sendData(dataStr);
-                tg.close();
+                setTimeout(() => {
+                    tg.close();
+                }, 1000);
             } else {
-                alert("Telegram ထဲတွင်သာ ဖွင့်ပါ");
+                alert("Telegram App ထဲတွင်သာ သုံးစွဲနိုင်ပါသည်။");
             }
         }
     </script>
