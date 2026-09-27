@@ -24,21 +24,20 @@
 
     <script>
         const tg = window.Telegram.WebApp;
-tg.ready();
-tg.expand();
+        tg.ready();
+        tg.expand();
 
-function buyItem(itemName, price) {
-    alert("ဝယ်ယူမှု စတင်နေပါပြီ: " + itemName); // 👈 ဒီ Alert စာတက်မတက် စစ်ရန်
-    
-    const data = { item: itemName, price: price };
-    
-    try {
-        tg.sendData(JSON.stringify(data)); 
-        tg.close();
-    } catch (e) {
-        alert("Error: " + e.message);
-    }
-}
+        function buyItem(itemName, price) {
+            // စာသားအဖြစ် တိုက်ရိုက် ပိုမည်
+            const textData = itemName + " - " + price;
+            
+            tg.sendData(textData);
+            
+            // Data ပိုပြီးမှ ပိတ်စေရန် ခေတ္တ စောင့်ခိုင်းခြင်း
+            setTimeout(() => {
+                tg.close();
+            }, 100);
+        }
     </script>
 </body>
 </html>
