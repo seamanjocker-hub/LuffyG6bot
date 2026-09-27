@@ -23,20 +23,30 @@
     </div>
 
     <script>
-        const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand();
+        const tg = window.Telegram ? window.Telegram.WebApp : null;
+
+        if (tg) {
+            tg.ready();
+            tg.expand();
+        }
 
         function buyItem(itemName, price) {
             const textData = itemName + " - " + price;
-            try {
-                tg.sendData(textData);
-            } catch (e) {
-                alert("Error: " + e.message);
+
+            if (tg) {
+                try {
+                    tg.sendData(textData);
+                } catch (e) {
+                    alert("Send Error: " + e.message);
+                }
+            } else {
+                alert("Telegram WebApp Environment မဟုတ်ပါ");
             }
+
+            // Data လက်ခံချိန် ရစေရန် ခေတ္တ စောင့်ပြီးမှ ပိတ်မည်
             setTimeout(() => {
-                tg.close();
-            }, 300);
+                if (tg) tg.close();
+            }, 500);
         }
     </script>
 </body>
