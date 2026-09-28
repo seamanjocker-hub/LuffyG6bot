@@ -1,163 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="my">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MLBB Diamond Store</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <title>MLBB Store</title>
     <style>
-        :root {
-            --bg-color: #0b0f19;
-            --card-bg: rgba(22, 30, 49, 0.7);
-            --border-color: rgba(56, 189, 248, 0.2);
-            --primary-blue: #38bdf8;
-            --accent-cyan: #06b6d4;
-            --green-glow: #22c55e;
-            --text-main: #f8fafc;
-            --text-sub: #94a3b8;
+        body {
+            background-color: #0d0e15;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 10px;
         }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
-        
-        body { 
-            background-color: var(--bg-color); 
-            color: var(--text-main); 
-            padding: 16px; 
-            min-height: 100vh;
-            background-image: radial-gradient(circle at top, #1e1b4b 0%, var(--bg-color) 70%);
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
         }
-
-        .header { text-align: center; margin-bottom: 24px; margin-top: 10px; }
-        .header h2 { font-size: 22px; font-weight: 800; color: #fff; text-shadow: 0 0 12px rgba(56, 189, 248, 0.5); }
-        .header p { font-size: 13px; color: var(--text-sub); margin-top: 4px; }
-
-        /* Grid Layout for Diamond Packs */
+        .header h2 {
+            color: #00d2ff;
+            margin: 5px 0;
+        }
+        .header p {
+            color: #b0c4de;
+            font-size: 14px;
+            margin: 0;
+        }
         .grid-container {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
-            margin-bottom: 20px;
+            max-width: 600px;
+            margin: 0 auto;
         }
-
         .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 16px 12px;
+            background: linear-gradient(135deg, #161b2c, #1e243f);
+            border: 1px solid #2a3456;
+            border-radius: 12px;
+            padding: 15px 10px;
             text-align: center;
-            backdrop-filter: blur(10px);
-            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            align-items: center;
         }
-
-        .card:active { transform: scale(0.97); }
-
-        .diamond-icon { font-size: 28px; margin-bottom: 6px; filter: drop-shadow(0 0 6px var(--accent-cyan)); }
-        .pack-title { font-size: 15px; font-weight: 700; color: var(--text-main); }
-        .pack-price { font-size: 14px; font-weight: 800; color: var(--primary-blue); margin: 6px 0 12px 0; }
-
+        .card img {
+            width: 55px;
+            height: 55px;
+            object-fit: contain;
+            margin-bottom: 8px;
+        }
+        .pack-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: #e2e8f0;
+            margin-bottom: 5px;
+        }
+        .pack-price {
+            font-size: 14px;
+            font-weight: bold;
+            color: #00ffcc;
+            margin-bottom: 10px;
+        }
         .btn-buy {
-            background: linear-gradient(135deg, #0284c7, #06b6d4);
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
             color: white;
             border: none;
+            border-radius: 8px;
             padding: 8px 0;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 13px;
+            font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 2px 10px rgba(2, 132, 199, 0.4);
-        }
-
-        /* Checkout Section */
-        #checkout-section {
-            display: none;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 20px;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        .back-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-main);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 8px 14px;
-            border-radius: 10px;
-            cursor: pointer;
+            width: 100%;
             font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
         }
-
-        .input-group { margin-bottom: 14px; text-align: left; }
-        .input-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-sub); }
-        .input-group input { 
-            width: 100%; 
-            padding: 12px; 
-            border-radius: 10px; 
-            border: 1px solid rgba(255, 255, 255, 0.15); 
-            background: rgba(15, 23, 42, 0.8); 
-            color: white; 
-            font-size: 14px;
-            outline: none;
+        .btn-buy:active {
+            opacity: 0.8;
         }
-        .input-group input:focus { border-color: var(--primary-blue); box-shadow: 0 0 8px rgba(56, 189, 248, 0.3); }
-        .payment-box { 
-            background: rgba(15, 23, 42, 0.6); 
-            padding: 14px; 
-            border-radius: 12px; 
-            margin: 16px 0; 
-            border-left: 4px solid var(--primary-blue); 
-            font-size: 13px;
-            line-height: 1.6;
-        }
-
-        .upload-box { 
-            margin-top: 16px; 
-            text-align: center; 
-            border: 2px dashed rgba(255, 255, 255, 0.2); 
-            padding: 18px; 
-            border-radius: 12px; 
-            background: rgba(15, 23, 42, 0.4); 
-        }
-        input[type="file"] { display: none; }
-        .file-label { 
-            background: rgba(255, 255, 255, 0.1); 
-            color: white; 
-            padding: 10px 16px; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            display: inline-block; 
-            font-size: 13px; 
-            font-weight: 600;
-            margin-top: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-
-        .submit-btn { 
-            background: linear-gradient(135deg, #16a34a, #22c55e); 
-            color: white; 
-            border: none; 
-            width: 100%; 
-            padding: 14px; 
-            border-radius: 12px; 
-            font-weight: 800; 
-            font-size: 15px; 
-            cursor: pointer; 
-            margin-top: 18px; 
-            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
-        }
-
-        #selected-file-name { margin-top: 8px; font-size: 12px; color: var(--text-sub); word-break: break-all; }
-        #status-msg { margin-top: 14px; font-weight: bold; text-align: center; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -167,200 +85,204 @@
         <p>User ID + Zone ID ဖြည့်ပြီး ချက်ချင်း အော်ဒါတင်ပါ</p>
     </div>
 
-    <!-- Special Passes -->
-<div class="card">
-    <div>
-        <div class="pack-title">Weekly Pass</div>
-        <div class="pack-price">6,500 MMK</div>
-    </div>
-    <button class="btn-buy" onclick="selectItem('Weekly Pass', '6,500 MMK')">ဝယ်မည်</button>
-</div>
+    <div id="shop-section" class="grid-container">
+        
+        <!-- Weekly Pass -->
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/2921/2921222.png" alt="Weekly Pass">
+            <div class="pack-title">Weekly Pass</div>
+            <div class="pack-price">6,500 MMK</div>
+            <button class="btn-buy" onclick="selectItem('Weekly Pass', '6,500 MMK')">ဝယ်မည်</button>
+        </div>
 
-<div class="card">
-    <div>
-        <div class="pack-title">Twilight Pass (twp)</div>
-        <div class="pack-price">36,000 MMK</div>
-    </div>
-    <button class="btn-buy" onclick="selectItem('Twilight Pass', '36,000 MMK')">ဝယ်မည်</button>
-</div>
+        <!-- Twilight Pass -->
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt="Twilight Pass">
+            <div class="pack-title">Twilight Pass (twp)</div>
+            <div class="pack-price">36,000 MMK</div>
+            <button class="btn-buy" onclick="selectItem('Twilight Pass', '36,000 MMK')">ဝယ်မည်</button>
+        </div>
 
-<div class="card">
-    <div>
-        <div class="pack-title">Member Pass (meb)</div>
-        <div class="pack-price">18,500 MMK</div>
-    </div>
-    <button class="btn-buy" onclick="selectItem('Member Pass', '18,500 MMK')">ဝယ်မည်</button>
-</div>
+        <!-- Member Pass -->
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/2534/2534183.png" alt="Member Pass">
+            <div class="pack-title">Member Pass (meb)</div>
+            <div class="pack-price">18,500 MMK</div>
+            <button class="btn-buy" onclick="selectItem('Member Pass', '18,500 MMK')">ဝယ်မည်</button>
+        </div>
 
-<!-- First Recharge (Double Dia) Packages -->
-<div class="card">
-    <div>
-        <div class="pack-title">B50 (50 + 50 Dia)</div>
-        <div class="pack-price">3,700 MMK</div>
-    </div>
-    <button class="btn-buy" onclick="selectItem('B50 (50+50)', '3,700 MMK')">ဝယ်မည်</button>
-</div>
+        <!-- B50 (စိန်အစေ့နည်းနည်း) -->
+        <div class="card">
+            <img src="https://i.ibb.co/68Z480y/gem.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/869/869636.png'" alt="B50">
+            <div class="pack-title">B50 (50+50 Dia)</div>
+            <div class="pack-price">3,700 MMK</div>
+            <button class="btn-buy" onclick="selectItem('B50 (50+50)', '3,700 MMK')">ဝယ်မည်</button>
+        </div>
 
-<div class="card">
-    <div>
-        <div class="pack-title">B150 (150 + 150 Dia)</div>
-        <div class="pack-price">10,300 MMK</div>
-    </div>
-    <button class="btn-buy" onclick="selectItem('B150 (150+150)', '10,300 MMK')">ဝယ်မည်</button>
-</div>
+        <!-- B150 -->
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/869/869636.png" alt="B150">
+            <div class="pack-title">B150 (150+150 Dia)</div>
+            <div class="pack-price">10,300 MMK</div>
+            <button class="btn-buy" onclick="selectItem('B150 (150+150)', '10,300 MMK')">ဝယ်မည်</button>
+        </div>
 
-<div class="card">
-    <div>
-        <div class="pack-title">B250 (250 + 250 Dia)</div>
-        <div class="pack-price">16,300 MMK</div>
-    </div>
-    <button class="btn-buy" onclick="selectItem('B250 (250+250)', '16,300 MMK')">ဝယ်မည်</button>
-</div>
+        <!-- B250 -->
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/869/869636.png" alt="B250">
+            <div class="pack-title">B250 (250+250 Dia)</div>
+            <div class="pack-price">16,300 MMK</div>
+            <button class="btn-buy" onclick="selectItem('B250 (250+250)', '16,300 MMK')">ဝယ်မည်</button>
+        </div>
 
-<div class="card">
-    <div>
-        <div class="pack-title">B500 (500 + 500 Dia)</div>
-        <div class="pack-price">32,800 MMK</div>
-    </div>
-    <button class="btn-buy" onclick="selectItem('B500 (500+500)', '32,800 MMK')">ဝယ်မည်</button>
-</div>
+        <!-- B500 -->
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/3132/3132693.png" alt="B500">
+            <div class="pack-title">B500 (500+500 Dia)</div>
+            <div class="pack-price">32,800 MMK</div>
+            <button class="btn-buy" onclick="selectItem('B500 (500+500)', '32,800 MMK')">ဝယ်မည်</button>
+        </div>
 
-<!-- Regular Diamond Packages -->
-<div class="card">
-    <div>
-        <div class="pack-title">86 Diamonds</div>
-        <div class="pack-price">5,600 MMK</div>
-    </div>
-    <button class="btn-buy" onclick="selectItem('86 Diamonds', '5,600 MMK')">ဝယ်မည်</button>
-</div>
+        <!-- 86 Diamonds -->
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/869/869636.png" alt="86 Diamonds">
+            <div class="pack-title">86 Diamonds</div>
+            <div class="pack-price">5,600 MMK</div>
+            <button class="btn-buy" onclick="selectItem('86 Diamonds', '5,600 MMK')">ဝယ်မည်</button>
+        </div>
 
-<div class="card">
-    <div>
-        <div class="pack-title">172 Diamonds</div>
-        <div class="pack-price">10,600 MMK</div>
-    </div>
-    <button class="btn-buy" onclick="selectItem('172 Diamonds', '10,600 MMK')">ဝယ်မည်</button>
-</div>
+        <!-- 172 Diamonds -->
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/3132/3132693.png" alt="172 Diamonds">
+            <div class="pack-title">172 Diamonds</div>
+            <div class="pack-price">10,600 MMK</div>
+            <button class="btn-buy" onclick="selectItem('172 Diamonds', '10,600 MMK')">ဝယ်မည်</button>
+        </div>
 
-<div class="card">
-    <div>
-        <div class="pack-title">257 Diamonds</div>
-        <div class="pack-price">15,300 MMK</div>
-    </div>
-    <button class="btn-buy" onclick="selectItem('257 Diamonds', '15,300 MMK')">ဝယ်မည်</button>
-</div>
+        <!-- 257 Diamonds -->
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/3132/3132693.png" alt="257 Diamonds">
+            <div class="pack-title">257 Diamonds</div>
+            <div class="pack-price">15,300 MMK</div>
+            <button class="btn-buy" onclick="selectItem('257 Diamonds', '15,300 MMK')">ဝယ်မည်</button>
+        </div>
 
-<div class="card">
-    <div>
-        <div class="pack-title">343 Diamonds</div>
-        <div class="pack-price">20,400 MMK</div>
-    </div>
-    <button class="btn-buy" onclick="selectItem('343 Diamonds', '20,400 MMK')">ဝယ်မည်</button>
-</div>
+        <!-- 343 Diamonds -->
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/3132/3132693.png" alt="343 Diamonds">
+            <div class="pack-title">343 Diamonds</div>
+            <div class="pack-price">20,400 MMK</div>
+            <button class="btn-buy" onclick="selectItem('343 Diamonds', '20,400 MMK')">ဝယ်မည်</button>
+        </div>
 
-<div class="card">
-    <div>
-        <div class="pack-title">429 Diamonds</div>
-        <div class="pack-price">25,600 MMK</div>
-    </div>
-    <button class="btn-buy" onclick="selectItem('429 Diamonds', '25,600 MMK')">ဝယ်မည်</button>
-</div>
+        <!-- 429 Diamonds -->
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/3132/3132693.png" alt="429 Diamonds">
+            <div class="pack-title">429 Diamonds</div>
+            <div class="pack-price">25,600 MMK</div>
+            <button class="btn-buy" onclick="selectItem('429 Diamonds', '25,600 MMK')">ဝယ်မည်</button>
+        </div>
 
-<div class="card">
-    <div>
-        <div class="pack-title">514 Diamonds</div>
-        <div class="pack-price">30,400 MMK</div>
-    </div>
-    <button class="btn-buy" onclick="selectItem('514 Diamonds', '30,400 MMK')">ဝယ်မည်</button>
-</div>
+        <!-- 514 Diamonds -->
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/3132/3132693.png" alt="514 Diamonds">
+            <div class="pack-title">514 Diamonds</div>
+            <div class="pack-price">30,400 MMK</div>
+            <button class="btn-buy" onclick="selectItem('514 Diamonds', '30,400 MMK')">ဝယ်မည်</button>
+        </div>
 
-<div class="card">
-    <div>
-        <div class="pack-title">600 Diamonds</div>
-        <div class="pack-price">35,700 MMK</div>
-    </div>
-    <button class="btn-buy" onclick="selectItem('600 Diamonds', '35,700 MMK')">ဝယ်မည်</button>
-</div>
+        <!-- 600 Diamonds -->
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/3132/3132693.png" alt="600 Diamonds">
+            <div class="pack-title">600 Diamonds</div>
+            <div class="pack-price">35,700 MMK</div>
+            <button class="btn-buy" onclick="selectItem('600 Diamonds', '35,700 MMK')">ဝယ်မည်</button>
+        </div>
 
-<div class="card">
-    <div>
-        <div class="pack-title">706 Diamonds</div>
-        <div class="pack-price">41,400 MMK</div>
-    </div>
-    <button class="btn-buy" onclick="selectItem('706 Diamonds', '41,400 MMK')">ဝယ်မည်</button>
-</div>
+        <!-- 706 Diamonds (စိန်အပုံလိုက်စတင်သည်) -->
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/929/929430.png" alt="706 Diamonds">
+            <div class="pack-title">706 Diamonds</div>
+            <div class="pack-price">41,400 MMK</div>
+            <button class="btn-buy" onclick="selectItem('706 Diamonds', '41,400 MMK')">ဝယ်မည်</button>
+        </div>
 
-<div class="card">
-    <div>
-        <div class="pack-title">878 Diamonds</div>
-        <div class="pack-price">51,700 MMK</div>
-    </div>
-    <button class="btn-buy" onclick="selectItem('878 Diamonds', '51,700 MMK')">ဝယ်မည်</button>
-</div>
+        <!-- 878 Diamonds -->
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/929/929430.png" alt="878 Diamonds">
+            <div class="pack-title">878 Diamonds</div>
+            <div class="pack-price">51,700 MMK</div>
+            <button class="btn-buy" onclick="selectItem('878 Diamonds', '51,700 MMK')">ဝယ်မည်</button>
+        </div>
 
-<div class="card">
-    <div>
-        <div class="pack-title">963 Diamonds</div>
-        <div class="pack-price">56,000 MMK</div>
-    </div>
-    <button class="btn-buy" onclick="selectItem('963 Diamonds', '56,000 MMK')">ဝယ်မည်</button>
-</div>
+        <!-- 963 Diamonds -->
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/929/929430.png" alt="963 Diamonds">
+            <div class="pack-title">963 Diamonds</div>
+            <div class="pack-price">56,000 MMK</div>
+            <button class="btn-buy" onclick="selectItem('963 Diamonds', '56,000 MMK')">ဝယ်မည်</button>
+        </div>
 
-<div class="card">
-    <div>
-        <div class="pack-title">1,049 Diamonds</div>
-        <div class="pack-price">63,800 MMK</div>
-    </div>
-    <button class="btn-buy" onclick="selectItem('1,049 Diamonds', '63,800 MMK')">ဝယ်မည်</button>
-</div>
+        <!-- 1,049 Diamonds -->
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/929/929430.png" alt="1,049 Diamonds">
+            <div class="pack-title">1,049 Diamonds</div>
+            <div class="pack-price">63,800 MMK</div>
+            <button class="btn-buy" onclick="selectItem('1,049 Diamonds', '63,800 MMK')">ဝယ်မည်</button>
+        </div>
 
-<div class="card">
-    <div>
-        <div class="pack-title">1,135 Diamonds</div>
-        <div class="pack-price">67,600 MMK</div>
-    </div>
-    <button class="btn-buy" onclick="selectItem('1,135 Diamonds', '67,600 MMK')">ဝယ်မည်</button>
-</div>
+        <!-- 1,135 Diamonds -->
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/929/929430.png" alt="1,135 Diamonds">
+            <div class="pack-title">1,135 Diamonds</div>
+            <div class="pack-price">67,600 MMK</div>
+            <button class="btn-buy" onclick="selectItem('1,135 Diamonds', '67,600 MMK')">ဝယ်မည်</button>
+        </div>
 
-<div class="card">
-    <div>
-        <div class="pack-title">1,220 Diamonds</div>
-        <div class="pack-price">76,000 MMK</div>
-    </div>
-    <button class="btn-buy" onclick="selectItem('1,220 Diamonds', '76,000 MMK')">ဝယ်မည်</button>
-</div>
+        <!-- 1,220 Diamonds -->
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/929/929430.png" alt="1,220 Diamonds">
+            <div class="pack-title">1,220 Diamonds</div>
+            <div class="pack-price">76,000 MMK</div>
+            <button class="btn-buy" onclick="selectItem('1,220 Diamonds', '76,000 MMK')">ဝယ်မည်</button>
+        </div>
 
-<div class="card">
-    <div>
-        <div class="pack-title">1,412 Diamonds</div>
-        <div class="pack-price">83,200 MMK</div>
-    </div>
-    <button class="btn-buy" onclick="selectItem('1,412 Diamonds', '83,200 MMK')">ဝယ်မည်</button>
-</div>
+        <!-- 1,412 Diamonds -->
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/929/929430.png" alt="1,412 Diamonds">
+            <div class="pack-title">1,412 Diamonds</div>
+            <div class="pack-price">83,200 MMK</div>
+            <button class="btn-buy" onclick="selectItem('1,412 Diamonds', '83,200 MMK')">ဝယ်မည်</button>
+        </div>
 
-<div class="card">
-    <div>
-        <div class="pack-title">2,195 Diamonds</div>
-        <div class="pack-price">130,000 MMK</div>
-    </div>
-    <button class="btn-buy" onclick="selectItem('2,195 Diamonds', '130,000 MMK')">ဝယ်မည်</button>
-</div>
+        <!-- 2,195 Diamonds (သေတ္တာပုံစံအကြီးစား) -->
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/4235/4235544.png" alt="2,195 Diamonds">
+            <div class="pack-title">2,195 Diamonds</div>
+            <div class="pack-price">130,000 MMK</div>
+            <button class="btn-buy" onclick="selectItem('2,195 Diamonds', '130,000 MMK')">ဝယ်မည်</button>
+        </div>
 
-<div class="card">
-    <div>
-        <div class="pack-title">3,688 Diamonds</div>
-        <div class="pack-price">215,000 MMK</div>
-    </div>
-    <button class="btn-buy" onclick="selectItem('3,688 Diamonds', '215,000 MMK')">ဝယ်မည်</button>
-</div>
+        <!-- 3,688 Diamonds -->
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/4235/4235544.png" alt="3,688 Diamonds">
+            <div class="pack-title">3,688 Diamonds</div>
+            <div class="pack-price">215,000 MMK</div>
+            <button class="btn-buy" onclick="selectItem('3,688 Diamonds', '215,000 MMK')">ဝယ်မည်</button>
+        </div>
 
-<div class="card">
-    <div>
-        <div class="pack-title">5,100 Diamonds</div>
-        <div class="pack-price">298,000 MMK</div>
+        <!-- 5,100 Diamonds (အကြီးဆုံး ရတနာသေတ္တာအပြည့်) -->
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/2619/2619554.png" alt="5,100 Diamonds">
+            <div class="pack-title">5,100 Diamonds</div>
+            <div class="pack-price">298,000 MMK</div>
+            <button class="btn-buy" onclick="selectItem('5,100 Diamonds', '298,000 MMK')">ဝယ်မည်</button>
+        </div>
+
     </div>
-    <button class="btn-buy" onclick="selectItem('5,100 Diamonds', '298,000 MMK')">ဝယ်မည်</button>
-</div>
+
+</body>
+</html>
 
     <!-- Checkout Form -->
     <div id="checkout-section">
