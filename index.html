@@ -6,72 +6,36 @@
     <title>MLBB Store</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body {
-            background-color: #0d0e15;
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 15px;
-        }
-        .header { text-align: center; margin-bottom: 20px; }
-        .header h2 { color: #00d2ff; margin: 5px 0; }
-        .header p { color: #b0c4de; font-size: 13px; margin: 0; }
+        body { background-color: #0d0e15; color: #ffffff; font-family: sans-serif; padding: 15px; margin: 0; }
+        .header { text-align: center; margin-bottom: 15px; }
+        .header h2 { color: #00d2ff; margin: 0; }
         
-        .input-section {
-            background: #161b2c;
-            border: 1px solid #2a3456;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
+        .input-section { background: #161b2c; border: 1px solid #2a3456; border-radius: 10px; padding: 12px; margin-bottom: 15px; }
         .input-group { display: flex; gap: 10px; }
         .input-box { flex: 1; }
-        .input-box label { display: block; font-size: 12px; color: #00d2ff; margin-bottom: 5px; font-weight: bold; }
-        .input-box input {
-            width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #2a3456;
-            background: #0d0e15; color: #fff; font-size: 14px; box-sizing: border-box;
-        }
+        .input-box label { display: block; font-size: 11px; color: #00d2ff; margin-bottom: 4px; font-weight: bold; }
+        .input-box input { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #2a3456; background: #0d0e15; color: #fff; box-sizing: border-box; }
 
-        .section-title { font-size: 14px; color: #00ffcc; margin-bottom: 10px; font-weight: bold; }
-        .grid-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
-        .card {
-            background: linear-gradient(135deg, #161b2c, #1e243f);
-            border: 1px solid #2a3456; border-radius: 10px; padding: 12px 8px; text-align: center; cursor: pointer;
-        }
+        .section-title { font-size: 13px; color: #00ffcc; margin-bottom: 8px; font-weight: bold; }
+        .grid-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 15px; }
+        .card { background: #161b2c; border: 1px solid #2a3456; border-radius: 8px; padding: 10px; text-align: center; cursor: pointer; }
         .card.selected { border: 2px solid #00ffcc; background: #252e4d; }
-        .pack-title { font-size: 13px; font-weight: bold; color: #e2e8f0; }
-        .pack-price { font-size: 14px; font-weight: bold; color: #00ffcc; margin-top: 5px; }
+        .pack-title { font-size: 12px; color: #e2e8f0; }
+        .pack-price { font-size: 13px; font-weight: bold; color: #00ffcc; margin-top: 4px; }
 
-        .payment-section {
-            background: #161b2c; border: 1px solid #2a3456; border-radius: 10px; padding: 15px; margin-bottom: 20px;
-        }
-        .kpay-box {
-            background: #0d0e15; border: 1px dashed #00c6ff; border-radius: 8px; padding: 10px; text-align: center; cursor: pointer; margin-bottom: 15px;
-        }
-        .kpay-num { font-size: 16px; font-weight: bold; color: #ffd700; }
-        .file-input { width: 100%; padding: 8px; background: #0d0e15; border: 1px solid #2a3456; border-radius: 6px; color: #fff; font-size: 12px; }
-
-        .btn-submit {
-            background: linear-gradient(90deg, #00c6ff, #0072ff); color: white; border: none;
-            border-radius: 8px; padding: 12px; font-weight: bold; width: 100%; font-size: 15px; cursor: pointer;
-        }
-
-        #toast {
-            visibility: hidden; min-width: 180px; background-color: #00ffcc; color: #000;
-            text-align: center; border-radius: 6px; padding: 8px; position: fixed; z-index: 10;
-            left: 50%; bottom: 20px; transform: translateX(-50%); font-size: 12px; font-weight: bold;
-        }
-        #toast.show { visibility: visible; }
+        .payment-section { background: #161b2c; border: 1px solid #2a3456; border-radius: 10px; padding: 12px; margin-bottom: 15px; }
+        .kpay-box { background: #0d0e15; border: 1px dashed #00c6ff; border-radius: 6px; padding: 8px; text-align: center; margin-bottom: 10px; cursor: pointer; }
+        
+        .btn-submit { background: linear-gradient(90deg, #00c6ff, #0072ff); color: white; border: none; border-radius: 8px; padding: 12px; font-weight: bold; width: 100%; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <h2>💎 MLBB Store</h2>
-        <p>အချက်အလက်ဖြည့်၍ အော်ဒါတင်ပါ</p>
     </div>
 
-    <!-- Player ID & Zone ID -->
+    <!-- Player ID & Server ID Input Fields -->
     <div class="input-section">
         <div class="input-group">
             <div class="input-box">
@@ -85,7 +49,6 @@
         </div>
     </div>
 
-    <!-- Diamond Packages -->
     <div class="section-title">ပက်ကေ့ဂျ် ရွေးချယ်ပါ</div>
     <div class="grid-container">
         <div class="card" onclick="selectCard(this, 'Weekly Pass', '6500')">
@@ -96,18 +59,6 @@
             <div class="pack-title">Twilight Pass</div>
             <div class="pack-price">36,000 MMK</div>
         </div>
-        <div class="card" onclick="selectCard(this, 'Member Pass', '18500')">
-            <div class="pack-title">Member Pass</div>
-            <div class="pack-price">18,500 MMK</div>
-        </div>
-        <div class="card" onclick="selectCard(this, 'B50 (50+50)', '3700')">
-            <div class="pack-title">B50 (50+50)</div>
-            <div class="pack-price">3,700 MMK</div>
-        </div>
-        <div class="card" onclick="selectCard(this, 'B150 (150+150)', '10300')">
-            <div class="pack-title">B150 (150+150)</div>
-            <div class="pack-price">10,300 MMK</div>
-        </div>
         <div class="card" onclick="selectCard(this, '86 Diamonds', '5600')">
             <div class="pack-title">86 Diamonds</div>
             <div class="pack-price">5,600 MMK</div>
@@ -116,37 +67,18 @@
             <div class="pack-title">172 Diamonds</div>
             <div class="pack-price">10,600 MMK</div>
         </div>
-        <div class="card" onclick="selectCard(this, '257 Diamonds', '15300')">
-            <div class="pack-title">257 Diamonds</div>
-            <div class="pack-price">15,300 MMK</div>
-        </div>
-        <div class="card" onclick="selectCard(this, '514 Diamonds', '30400')">
-            <div class="pack-title">514 Diamonds</div>
-            <div class="pack-price">30,400 MMK</div>
-        </div>
-        <div class="card" onclick="selectCard(this, '706 Diamonds', '41400')">
-            <div class="pack-title">706 Diamonds</div>
-            <div class="pack-price">41,400 MMK</div>
-        </div>
     </div>
 
-    <!-- KPay & Slip -->
     <div class="payment-section">
-        <div class="section-title" style="text-align: center;">KBZPay ငွေပေးချေရန်</div>
-        <div class="kpay-box" onclick="copyKPay('09773814319')">
-            <div class="kpay-num">09773814319</div>
-            <div style="font-size: 11px; color: #b0c4de;">အမည် - Wanna Hein (နှိပ်၍ Copy ကူးပါ)</div>
+        <div class="kpay-box" onclick="navigator.clipboard.writeText('09773814319'); alert('KPay Copied!');">
+            <div style="color:#ffd700; font-weight:bold;">09773814319</div>
+            <div style="font-size:10px; color:#b0c4de;">Wanna Hein (နှိပ်၍ Copy ကူးပါ)</div>
         </div>
-
-        <div>
-            <label style="display:block; font-size: 12px; color: #b0c4de; margin-bottom: 8px; text-align:center;">📸 KPay Slip တင်ပေးပါ -</label>
-            <input type="file" id="slipFile" accept="image/*" class="file-input">
-        </div>
+        <label style="font-size:11px; color:#b0c4de; display:block; margin-bottom:5px;">📸 KPay Slip တင်ပေးပါ -</label>
+        <input type="file" id="slipFile" accept="image/*" style="width:100%; color:#fff;">
     </div>
 
     <button class="btn-submit" id="submitBtn" onclick="submitOrder()">အော်ဒါအတည်ပြုမည်</button>
-
-    <div id="toast">Copied လုပ်ပြီးပါပြီ! ✅</div>
 
     <script>
         const tg = window.Telegram.WebApp;
@@ -162,14 +94,6 @@
             selectedItemPrice = price;
         }
 
-        function copyKPay(number) {
-            navigator.clipboard.writeText(number);
-            const toast = document.getElementById("toast");
-            toast.className = "show";
-            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 2000);
-        }
-
-        // PythonAnywhere ဆာဗာဆီ ဖိုင်ရော Data ပါ ပို့မည့် Function
         async function submitOrder() {
             const playerId = document.getElementById("playerId").value;
             const zoneId = document.getElementById("zoneId").value;
@@ -183,22 +107,21 @@
             btn.disabled = true;
             btn.innerText = "အော်ဒါ ပို့နေပါပြီ...";
 
-            // PythonAnywhere API သို့ ပို့ရန် FormData ပြင်ဆင်ခြင်း
             const formData = new FormData();
             formData.append("player_id", playerId);
             formData.append("zone_id", zoneId);
             formData.append("item", selectedItemName);
             formData.append("price", selectedItemPrice);
-            formData.append("photo", fileInput.files[0]);
-            
-            // Telegram User ID ပါ ပို့ပေးခြင်း (ဆာဗာက ဘယ်သူလဲသိအောင်)
+            formData.append("slip", fileInput.files[0]);
+
             if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
                 formData.append("user_id", tg.initDataUnsafe.user.id);
+                formData.append("username", tg.initDataUnsafe.user.username || "No Username");
             }
 
             try {
-                // ⚠️ အောက်က URL မှာ သားကြီးရဲ့ PythonAnywhere Username နာမည် ပြောင်းပေးပါ ⚠️
-                const response = await fetch("https://JockerLinn.pythonanywhere.com/upload_slip", {
+                // ⚠️ သားကြီးရဲ့ PythonAnywhere URL ကို ဒီမှာ အမှန်ထည့်ပါ ⚠️
+                const response = await fetch("https://JockerLinn.pythonanywhere.com/submit-order", {
                     method: "POST",
                     body: formData
                 });
@@ -207,9 +130,9 @@
 
                 if (result.status === "success") {
                     alert("အော်ဒါ အောင်မြင်စွာ တင်ပြီးပါပြီ!");
-                    tg.close(); // Mini App ပိတ်လိုက်မည်
+                    tg.close();
                 } else {
-                    alert("Error: " + result.message);
+                    alert("Error: " + (result.message || "Unknown error"));
                     btn.disabled = false;
                     btn.innerText = "အော်ဒါအတည်ပြုမည်";
                 }
