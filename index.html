@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MLBB Store</title>
-    <!-- Telegram WebApp SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
@@ -14,21 +13,10 @@
             margin: 0;
             padding: 15px;
         }
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .header h2 {
-            color: #00d2ff;
-            margin: 5px 0;
-        }
-        .header p {
-            color: #b0c4de;
-            font-size: 13px;
-            margin: 0;
-        }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h2 { color: #00d2ff; margin: 5px 0; }
+        .header p { color: #b0c4de; font-size: 13px; margin: 0; }
         
-        /* User ID / Server ID Input Section */
         .input-section {
             background: #161b2c;
             border: 1px solid #2a3456;
@@ -36,143 +24,44 @@
             padding: 15px;
             margin-bottom: 20px;
         }
-        .input-group {
-            display: flex;
-            gap: 10px;
-        }
-        .input-box {
-            flex: 1;
-        }
-        .input-box label {
-            display: block;
-            font-size: 12px;
-            color: #00d2ff;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
+        .input-group { display: flex; gap: 10px; }
+        .input-box { flex: 1; }
+        .input-box label { display: block; font-size: 12px; color: #00d2ff; margin-bottom: 5px; font-weight: bold; }
         .input-box input {
-            width: 100%;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #2a3456;
-            background: #0d0e15;
-            color: #fff;
-            font-size: 14px;
-            box-sizing: border-box;
+            width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #2a3456;
+            background: #0d0e15; color: #fff; font-size: 14px; box-sizing: border-box;
         }
 
-        /* Item Grid */
-        .section-title {
-            font-size: 14px;
-            color: #00ffcc;
-            margin-bottom: 10px;
-            font-weight: bold;
-        }
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+        .section-title { font-size: 14px; color: #00ffcc; margin-bottom: 10px; font-weight: bold; }
+        .grid-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
         .card {
             background: linear-gradient(135deg, #161b2c, #1e243f);
-            border: 1px solid #2a3456;
-            border-radius: 10px;
-            padding: 12px 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.2s;
+            border: 1px solid #2a3456; border-radius: 10px; padding: 12px 8px; text-align: center; cursor: pointer;
         }
-        .card.selected {
-            border: 2px solid #00ffcc;
-            background: #252e4d;
-        }
-        .pack-title {
-            font-size: 13px;
-            font-weight: bold;
-            color: #e2e8f0;
-        }
-        .pack-price {
-            font-size: 14px;
-            font-weight: bold;
-            color: #00ffcc;
-            margin-top: 5px;
-        }
+        .card.selected { border: 2px solid #00ffcc; background: #252e4d; }
+        .pack-title { font-size: 13px; font-weight: bold; color: #e2e8f0; }
+        .pack-price { font-size: 14px; font-weight: bold; color: #00ffcc; margin-top: 5px; }
 
-        /* KPay & Slip Upload Section */
         .payment-section {
-            background: #161b2c;
-            border: 1px solid #2a3456;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
+            background: #161b2c; border: 1px solid #2a3456; border-radius: 10px; padding: 15px; margin-bottom: 20px;
         }
         .kpay-box {
-            background: #0d0e15;
-            border: 1px dashed #00c6ff;
-            border-radius: 8px;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            margin-bottom: 15px;
+            background: #0d0e15; border: 1px dashed #00c6ff; border-radius: 8px; padding: 10px; text-align: center; cursor: pointer; margin-bottom: 15px;
         }
-        .kpay-num {
-            font-size: 16px;
-            font-weight: bold;
-            color: #ffd700;
-        }
-        .file-upload-box {
-            text-align: center;
-        }
-        .file-upload-box label {
-            display: block;
-            font-size: 12px;
-            color: #b0c4de;
-            margin-bottom: 8px;
-        }
-        .file-input {
-            width: 100%;
-            padding: 8px;
-            background: #0d0e15;
-            border: 1px solid #2a3456;
-            border-radius: 6px;
-            color: #fff;
-            font-size: 12px;
-        }
+        .kpay-num { font-size: 16px; font-weight: bold; color: #ffd700; }
+        .file-input { width: 100%; padding: 8px; background: #0d0e15; border: 1px solid #2a3456; border-radius: 6px; color: #fff; font-size: 12px; }
 
-        /* Submit Button */
         .btn-submit {
-            background: linear-gradient(90deg, #00c6ff, #0072ff);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 12px;
-            font-weight: bold;
-            width: 100%;
-            font-size: 15px;
-            cursor: pointer;
+            background: linear-gradient(90deg, #00c6ff, #0072ff); color: white; border: none;
+            border-radius: 8px; padding: 12px; font-weight: bold; width: 100%; font-size: 15px; cursor: pointer;
         }
 
-        /* Toast Popup */
         #toast {
-            visibility: hidden;
-            min-width: 180px;
-            background-color: #00ffcc;
-            color: #000;
-            text-align: center;
-            border-radius: 6px;
-            padding: 8px;
-            position: fixed;
-            z-index: 10;
-            left: 50%;
-            bottom: 20px;
-            transform: translateX(-50%);
-            font-size: 12px;
-            font-weight: bold;
+            visibility: hidden; min-width: 180px; background-color: #00ffcc; color: #000;
+            text-align: center; border-radius: 6px; padding: 8px; position: fixed; z-index: 10;
+            left: 50%; bottom: 20px; transform: translateX(-50%); font-size: 12px; font-weight: bold;
         }
-        #toast.show {
-            visibility: visible;
-        }
+        #toast.show { visibility: visible; }
     </style>
 </head>
 <body>
@@ -182,7 +71,7 @@
         <p>အချက်အလက်ဖြည့်၍ အော်ဒါတင်ပါ</p>
     </div>
 
-    <!-- ၁။ Player ID & Server ID တောင်းသည့်နေရာ -->
+    <!-- Player ID & Zone ID -->
     <div class="input-section">
         <div class="input-group">
             <div class="input-box">
@@ -196,9 +85,9 @@
         </div>
     </div>
 
-    <!-- ၂။ Diamond / Pass ရွေးရန် Grid -->
+    <!-- Diamond Packages -->
     <div class="section-title">ပက်ကေ့ဂျ် ရွေးချယ်ပါ</div>
-    <div class="grid-container" id="itemGrid">
+    <div class="grid-container">
         <div class="card" onclick="selectCard(this, 'Weekly Pass', '6500')">
             <div class="pack-title">Weekly Pass</div>
             <div class="pack-price">6,500 MMK</div>
@@ -219,14 +108,6 @@
             <div class="pack-title">B150 (150+150)</div>
             <div class="pack-price">10,300 MMK</div>
         </div>
-        <div class="card" onclick="selectCard(this, 'B250 (250+250)', '16300')">
-            <div class="pack-title">B250 (250+250)</div>
-            <div class="pack-price">16,300 MMK</div>
-        </div>
-        <div class="card" onclick="selectCard(this, 'B500 (500+500)', '32800')">
-            <div class="pack-title">B500 (500+500)</div>
-            <div class="pack-price">32,800 MMK</div>
-        </div>
         <div class="card" onclick="selectCard(this, '86 Diamonds', '5600')">
             <div class="pack-title">86 Diamonds</div>
             <div class="pack-price">5,600 MMK</div>
@@ -239,10 +120,6 @@
             <div class="pack-title">257 Diamonds</div>
             <div class="pack-price">15,300 MMK</div>
         </div>
-        <div class="card" onclick="selectCard(this, '343 Diamonds', '20400')">
-            <div class="pack-title">343 Diamonds</div>
-            <div class="pack-price">20,400 MMK</div>
-        </div>
         <div class="card" onclick="selectCard(this, '514 Diamonds', '30400')">
             <div class="pack-title">514 Diamonds</div>
             <div class="pack-price">30,400 MMK</div>
@@ -251,43 +128,33 @@
             <div class="pack-title">706 Diamonds</div>
             <div class="pack-price">41,400 MMK</div>
         </div>
-        <div class="card" onclick="selectCard(this, '2195 Diamonds', '130000')">
-            <div class="pack-title">2,195 Diamonds</div>
-            <div class="pack-price">130,000 MMK</div>
-        </div>
-        <div class="card" onclick="selectCard(this, '5100 Diamonds', '298000')">
-            <div class="pack-title">5,100 Diamonds</div>
-            <div class="pack-price">298,000 MMK</div>
-        </div>
     </div>
 
-    <!-- ၃။ KPay နံပါတ်နှိပ်ရုံဖြင့် Copy ကူးခြင်း + Slip ဓာတ်ပုံ တောင်းသည့်နေရာ -->
+    <!-- KPay & Slip -->
     <div class="payment-section">
         <div class="section-title" style="text-align: center;">KBZPay ငွေပေးချေရန်</div>
-        <div class="kpay-box" onclick="copyKPay('09773814319')">
-            <div class="kpay-num">09773814319</div>
-            <div style="font-size: 11px; color: #b0c4de;">အမည် - Wanna Hein (နှိပ်၍ Copy ကူးပါ)</div>
+        <div class="kpay-box" onclick="copyKPay('09123456789')">
+            <div class="kpay-num">09123456789</div>
+            <div style="font-size: 11px; color: #b0c4de;">အမည် - ဦးဖြိုး (နှိပ်၍ Copy ကူးပါ)</div>
         </div>
 
-        <div class="file-upload-box">
-            <label>📸 KPay ငွေလွှပြေစာ (Slip) တင်ပေးပါ -</label>
+        <div>
+            <label style="display:block; font-size: 12px; color: #b0c4de; margin-bottom: 8px; text-align:center;">📸 KPay Slip တင်ပေးပါ -</label>
             <input type="file" id="slipFile" accept="image/*" class="file-input">
         </div>
     </div>
 
-    <!-- Telegram Bot ဆီသို Order ပိုပေးမည့် Button -->
-    <button class="btn-submit" onclick="submitOrder()">အော်ဒါအတည်ပြုမည်</button>
+    <button class="btn-submit" id="submitBtn" onclick="submitOrder()">အော်ဒါအတည်ပြုမည်</button>
 
     <div id="toast">Copied လုပ်ပြီးပါပြီ! ✅</div>
 
     <script>
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Telegram WebApp ကို စကရင်အပြည့်ပွင့်အောင်လုပ်ခြင်း
+        tg.expand();
 
         let selectedItemName = "";
         let selectedItemPrice = "";
 
-        // Card ရွေးချယ်သည့် Function
         function selectCard(element, name, price) {
             document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
             element.classList.add('selected');
@@ -295,7 +162,6 @@
             selectedItemPrice = price;
         }
 
-        // KPay No Copy ကူးသည့် Function
         function copyKPay(number) {
             navigator.clipboard.writeText(number);
             const toast = document.getElementById("toast");
@@ -303,36 +169,55 @@
             setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 2000);
         }
 
-        // Order ကို Telegram Bot ထံသို WebApp Data အဖြစ် ပိုပေးခြင်း
-        function submitOrder() {
+        // PythonAnywhere ဆာဗာဆီ ဖိုင်ရော Data ပါ ပို့မည့် Function
+        async function submitOrder() {
             const playerId = document.getElementById("playerId").value;
             const zoneId = document.getElementById("zoneId").value;
             const fileInput = document.getElementById("slipFile");
+            const btn = document.getElementById("submitBtn");
 
-            if (!playerId || !zoneId) {
-                alert("ကျေးဇူးပြု၍ Player ID နှင့် Zone ID ဖြည့်ပေးပါ!");
-                return;
-            }
-            if (!selectedItemName) {
-                alert("ကျေးဇူးပြု၍ ဝယ်ယူမည့် ပက်ကေ့ဂျ်ကို ရွေးပေးပါ!");
-                return;
-            }
-            if (fileInput.files.length === 0) {
-                alert("ကျေးဇူးပြု၍ KPay Slip ဓာတ်ပုံ တင်ပေးပါ!");
-                return;
+            if (!playerId || !zoneId) return alert("Player ID နဲ့ Zone ID ဖြည့်ပေးပါ!");
+            if (!selectedItemName) return alert("ပက်ကေ့ဂျ် ရွေးပေးပါ!");
+            if (fileInput.files.length === 0) return alert("KPay Slip ဓာတ်ပုံ တင်ပေးပါ!");
+
+            btn.disabled = true;
+            btn.innerText = "အော်ဒါ ပို့နေပါပြီ...";
+
+            // PythonAnywhere API သို့ ပို့ရန် FormData ပြင်ဆင်ခြင်း
+            const formData = new FormData();
+            formData.append("player_id", playerId);
+            formData.append("zone_id", zoneId);
+            formData.append("item", selectedItemName);
+            formData.append("price", selectedItemPrice);
+            formData.append("slip", fileInput.files[0]);
+            
+            // Telegram User ID ပါ ပို့ပေးခြင်း (ဆာဗာက ဘယ်သူလဲသိအောင်)
+            if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                formData.append("user_id", tg.initDataUnsafe.user.id);
             }
 
-            // Telegram Bot ထံသို Order အချက်အလက်များ လှမ်းပိုပေးမည်
-            const orderData = {
-                player_id: playerId,
-                zone_id: zoneId,
-                item: selectedItemName,
-                price: selectedItemPrice,
-                has_slip: true
-            };
+            try {
+                // ⚠️ အောက်က URL မှာ သားကြီးရဲ့ PythonAnywhere Username နာမည် ပြောင်းပေးပါ ⚠️
+                const response = await fetch("https://pythonanywhere.com/submit-order", {
+                    method: "POST",
+                    body: formData
+                });
 
-            // Telegram WebApp ထဲသို Data ပြန်ပိုပေးခြင်း
-            tg.sendData(JSON.stringify(orderData));
+                const result = await response.json();
+
+                if (result.status === "success") {
+                    alert("အော်ဒါ အောင်မြင်စွာ တင်ပြီးပါပြီ!");
+                    tg.close(); // Mini App ပိတ်လိုက်မည်
+                } else {
+                    alert("Error: " + result.message);
+                    btn.disabled = false;
+                    btn.innerText = "အော်ဒါအတည်ပြုမည်";
+                }
+            } catch (error) {
+                alert("ဆာဗာသို့ ပို့မရပါ! အင်တာနက် သို့မဟုတ် PythonAnywhere URL စစ်ပေးပါ။");
+                btn.disabled = false;
+                btn.innerText = "အော်ဒါအတည်ပြုမည်";
+            }
         }
     </script>
 </body>
