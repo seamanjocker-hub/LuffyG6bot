@@ -10,12 +10,6 @@
         .header { text-align: center; margin-bottom: 15px; }
         .header h2 { color: #00d2ff; margin: 0; }
         
-        .input-section { background: #161b2c; border: 1px solid #2a3456; border-radius: 10px; padding: 12px; margin-bottom: 15px; }
-        .input-group { display: flex; gap: 10px; }
-        .input-box { flex: 1; }
-        .input-box label { display: block; font-size: 11px; color: #00d2ff; margin-bottom: 4px; font-weight: bold; }
-        .input-box input { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #2a3456; background: #0d0e15; color: #fff; box-sizing: border-box; }
-
         .section-title { font-size: 13px; color: #00ffcc; margin-bottom: 8px; font-weight: bold; }
         .grid-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 15px; }
         .card { background: #161b2c; border: 1px solid #2a3456; border-radius: 8px; padding: 10px; text-align: center; cursor: pointer; }
@@ -23,10 +17,19 @@
         .pack-title { font-size: 12px; color: #e2e8f0; }
         .pack-price { font-size: 13px; font-weight: bold; color: #00ffcc; margin-top: 4px; }
 
-        .payment-section { background: #161b2c; border: 1px solid #2a3456; border-radius: 10px; padding: 12px; margin-bottom: 15px; }
+        .input-section { background: #161b2c; border: 1px solid #2a3456; border-radius: 10px; padding: 12px; margin-bottom: 15px; }
+        .input-group { display: flex; gap: 10px; margin-bottom: 10px; }
+        .input-box { flex: 1; }
+        .input-box label { display: block; font-size: 11px; color: #00d2ff; margin-bottom: 4px; font-weight: bold; }
+        .input-box input { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #2a3456; background: #0d0e15; color: #fff; box-sizing: border-box; }
+
+        .btn-check { background: #00c6ff; color: #000; border: none; border-radius: 6px; padding: 8px; font-weight: bold; width: 100%; cursor: pointer; font-size: 12px; }
+        .name-result { margin-top: 8px; font-size: 12px; font-weight: bold; color: #ffd700; text-align: center; }
+
+        .payment-section { background: #161b2c; border: 1px solid #2a3456; border-radius: 10px; padding: 12px; margin-bottom: 15px; display: none; }
         .kpay-box { background: #0d0e15; border: 1px dashed #00c6ff; border-radius: 6px; padding: 8px; text-align: center; margin-bottom: 10px; cursor: pointer; }
         
-        .btn-submit { background: linear-gradient(90deg, #00c6ff, #0072ff); color: white; border: none; border-radius: 8px; padding: 12px; font-weight: bold; width: 100%; cursor: pointer; }
+        .btn-submit { background: linear-gradient(90deg, #00c6ff, #0072ff); color: white; border: none; border-radius: 8px; padding: 12px; font-weight: bold; width: 100%; cursor: pointer; display: none; }
     </style>
 </head>
 <body>
@@ -35,21 +38,8 @@
         <h2>💎 MLBB Store</h2>
     </div>
 
-    <!-- Player ID & Server ID Input Fields -->
-    <div class="input-section">
-        <div class="input-group">
-            <div class="input-box">
-                <label>Player ID</label>
-                <input type="number" id="playerId" placeholder="12345678">
-            </div>
-            <div class="input-box">
-                <label>Zone ID</label>
-                <input type="number" id="zoneId" placeholder="1234">
-            </div>
-        </div>
-    </div>
-
-    <div class="section-title">ပက်ကေ့ဂျ် ရွေးချယ်ပါ</div>
+    <!-- 1. ITEM SELECTION -->
+    <div class="section-title">၁။ ပက်ကေ့ဂျ် ရွေးချယ်ပါ</div>
     <div class="grid-container">
         <div class="card" onclick="selectCard(this, 'Weekly Pass', '6500')">
             <div class="pack-title">Weekly Pass</div>
@@ -69,7 +59,25 @@
         </div>
     </div>
 
-    <div class="payment-section">
+    <!-- 2. PLAYER ID & CHECK -->
+    <div class="section-title">၂။ အကောင့် အချက်အလက်</div>
+    <div class="input-section">
+        <div class="input-group">
+            <div class="input-box">
+                <label>Player ID</label>
+                <input type="number" id="playerId" placeholder="12345678">
+            </div>
+            <div class="input-box">
+                <label>Zone ID</label>
+                <input type="number" id="zoneId" placeholder="1234">
+            </div>
+        </div>
+        <button class="btn-check" onclick="checkAccount()">အကောင့်စစ်ဆေးမည် 🔍</button>
+        <div class="name-result" id="nameDisplay"></div>
+    </div>
+    <!-- 3. PAYMENT SECTION -->
+    <div class="payment-section" id="paymentSec">
+        <div class="section-title">၃။ ငွေပေးချေမှု</div>
         <div class="kpay-box" onclick="navigator.clipboard.writeText('09773814319'); alert('KPay Copied!');">
             <div style="color:#ffd700; font-weight:bold;">09773814319</div>
             <div style="font-size:10px; color:#b0c4de;">Wanna Hein (နှိပ်၍ Copy ကူးပါ)</div>
@@ -78,7 +86,7 @@
         <input type="file" id="slipFile" accept="image/*" style="width:100%; color:#fff;">
     </div>
 
-    <button class="btn-submit" id="submitBtn" onclick="submitOrder()">အော်ဒါအတည်ပြုမည်</button>
+    <button class="btn-submit" id="submitBtn" onclick="submitOrder()">အော်ဒါအတည်ပြုမည် 🚀</button>
 
     <script>
         const tg = window.Telegram.WebApp;
@@ -86,6 +94,7 @@
 
         let selectedItemName = "";
         let selectedItemPrice = "";
+        let isAccountVerified = false;
 
         function selectCard(element, name, price) {
             document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
@@ -94,18 +103,56 @@
             selectedItemPrice = price;
         }
 
+        // 1. MLBB ID CHECKER (Render URL)
+        async function checkAccount() {
+            const playerId = document.getElementById("playerId").value;
+            const zoneId = document.getElementById("zoneId").value;
+
+            if (!playerId || !zoneId) {
+                alert("Player ID နှင့် Zone ID ဖြည့်ပေးပါ!");
+                return;
+            }
+
+            document.getElementById("nameDisplay").innerText = "🔄 အကောင့်စစ်ဆေးနေပါသည်...";
+
+            try {
+                const response = await fetch("https://mlbb-userbot.onrender.com/check-role", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ player_id: playerId, zone_id: zoneId })
+                });
+
+                const data = await response.json();
+
+                if (data.status === "success") {
+                    document.getElementById("nameDisplay").innerText = "🎮 In-Game Name: " + data.nickname;
+                    isAccountVerified = true;
+                    
+                    document.getElementById("paymentSec").style.display = "block";
+                    document.getElementById("submitBtn").style.display = "block";
+                } else {
+                    document.getElementById("nameDisplay").innerText = "❌ " + (data.message || "အကောင့် ရှာမတွေ့ပါ");
+                    isAccountVerified = false;
+                }
+            } catch (err) {
+                document.getElementById("nameDisplay").innerText = "❌ ဆာဗာ ချိတ်ဆက်၍ မရပါ";
+                isAccountVerified = false;
+            }
+        }
+
+        // 2. SUBMIT ORDER (Render URL)
         async function submitOrder() {
             const playerId = document.getElementById("playerId").value;
             const zoneId = document.getElementById("zoneId").value;
             const fileInput = document.getElementById("slipFile");
             const btn = document.getElementById("submitBtn");
 
-            if (!playerId || !zoneId) return alert("Player ID နဲ့ Zone ID ဖြည့်ပေးပါ!");
             if (!selectedItemName) return alert("ပက်ကေ့ဂျ် ရွေးပေးပါ!");
+            if (!isAccountVerified) return alert("အကောင့် အရင်စစ်ဆေးပေးပါ!");
             if (fileInput.files.length === 0) return alert("KPay Slip ဓာတ်ပုံ တင်ပေးပါ!");
 
             btn.disabled = true;
-            btn.innerText = "အော်ဒါ ပို့နေပါပြီ...";
+            btn.innerText = "အော်ဒါ ပိုနေပါပြီ...";
 
             const formData = new FormData();
             formData.append("player_id", playerId);
@@ -118,10 +165,8 @@
                 formData.append("user_id", tg.initDataUnsafe.user.id);
                 formData.append("username", tg.initDataUnsafe.user.username || "No Username");
             }
-
             try {
-                // ⚠️ သားကြီးရဲ့ PythonAnywhere URL ကို ဒီမှာ အမှန်ထည့်ပါ ⚠️
-                const response = await fetch("https://JockerLinn.pythonanywhere.com/submit-order", {
+                const response = await fetch("https://mlbb-userbot.onrender.com/submit-order", {
                     method: "POST",
                     body: formData
                 });
@@ -134,12 +179,12 @@
                 } else {
                     alert("Error: " + (result.message || "Unknown error"));
                     btn.disabled = false;
-                    btn.innerText = "အော်ဒါအတည်ပြုမည်";
+                    btn.innerText = "အော်ဒါအတည်ပြုမည် 🚀";
                 }
             } catch (error) {
-                alert("ဆာဗာသို့ ပို့မရပါ! အင်တာနက် သို့မဟုတ် PythonAnywhere URL စစ်ပေးပါ။");
+                alert("ဆာဗာသို ပိုမရပါ! အင်တာနက် သိုမဟုတ် Backend URL စစ်ပေးပါ။");
                 btn.disabled = false;
-                btn.innerText = "အော်ဒါအတည်ပြုမည်";
+                btn.innerText = "အော်ဒါအတည်ပြုမည် 🚀";
             }
         }
     </script>
